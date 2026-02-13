@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Endless Scroll Hell</title>
+
+<style>
+
+body{
+    margin:0;
+    background:black;
+    color:lime;
+    font-family:monospace;
+    overflow:hidden; /* YOU DON'T CONTROL SCROLL */
+}
+
+/* fake scroll world */
+#world{
+    position:absolute;
+    width:100%;
+}
+
+.section{
+    height:140vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:40px;
+    text-align:center;
+}
+
+/* lying progress bar */
+#progress{
+    position:fixed;
+    top:0;
+    left:0;
+    height:6px;
+    background:red;
+    width:10%;
+    z-index:9999;
+}
+
+/* flashing message */
+#msg{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    background:red;
+    padding:10px;
+    display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="progress"></div>
+<div id="msg">ARE YOU REALLY MOVING?</div>
+
+<div id="world"></div>
+
+<!-- CURSED SOUNDS -->
+<audio id="creak" src="https://www.soundjay.com/door/door-creak-1.wav"></audio>
+<audio id="scratch" src="https://www.soundjay.com/human/scratch-1.wav"></audio>
+<audio id="error" src="https://www.soundjay.com/button/beep-10.wav"></audio>
+<audio id="metal" src="https://www.soundjay.com/mechanical/metal-squeak.wav"></audio>
+
+<script>
+
+const world=document.getElementById("world");
+
+/* CREATE FAKE ENDLESS CONTENT */
+let texts=[
+"Scroll Down 🙂",
+"Almost there...",
+"Wait why again?",
+"You already saw this.",
+"KEEP SCROLLING.",
+"WHY ARE YOU STILL TRYING?"
+];
+
+for(let i=0;i<40;i++){
+    let div=document.createElement("div");
+    div.className="section";
+    div.innerText=texts[i%texts.length];
+    world.appendChild(div);
+}
+
+let fakeScroll=0;
+let velocity=0;
+
+/* SOUND CHAOS */
+const sounds=[
+creak,scratch,error,metal
+];
+
+function playChaosSound(){
+    let s=sounds[Math.floor(Math.random()*sounds.length)];
+    s.currentTime=0;
+    s.playbackRate=Math.random()*2+0.3;
+    s.volume=Math.random();
+    s.play();
+}
+
+/* TAKE OVER SCROLL COMPLETELY */
+window.addEventListener("wheel",(e)=>{
+
+    e.preventDefault();
+
+    playChaosSound();
+
+    let power=e.deltaY;
+
+    /* RANDOM PHYSICS */
+    if(Math.random()<0.3) power*=-1;
+    if(Math.random()<0.2) power*=5;
+    if(Math.random()<0.2) power*=0.1;
+
+    velocity+=power*0.05;
+
+});
+
+/* FAKE PHYSICS LOOP */
+function update(){
+
+    fakeScroll+=velocity;
+
+    /* friction changes randomly */
+    velocity*=Math.random()*0.8;
+
+    /* auto movement */
+    if(Math.random()<0.01){
+        velocity+=Math.random()*40-20;
+    }
+
+    world.style.transform=
+        `translateY(${-fakeScroll}px)`;
+
+    /* PROGRESS GASLIGHTING */
+    let p=(fakeScroll%2000)/20;
+    document.getElementById("progress").style.width=
+        p+"%";
+
+    /* existential message */
+    if(Math.random()<0.005){
+        msg.style.display="block";
+        setTimeout(()=>msg.style.display="none",800);
+    }
+
+    requestAnimationFrame(update);
+}
+
+update();
+
+</script>
+</body>
+</html>
