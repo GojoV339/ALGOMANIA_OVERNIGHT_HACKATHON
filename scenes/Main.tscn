@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8vgs2ydq5h6r"]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_war48"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_war48")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Objective" type="Label" parent="HUD"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 560.0
+offset_bottom = 36.0
+text = "Protect the last candle until dawn. Collect wax and repel shadows."
+
+[node name="Stats" type="Label" parent="HUD"]
+offset_left = 12.0
+offset_top = 34.0
+offset_right = 320.0
+offset_bottom = 66.0
+text = ""
+
+[node name="State" type="Label" parent="HUD"]
+offset_left = 12.0
+offset_top = 58.0
+offset_right = 700.0
+offset_bottom = 95.0
+text = ""
